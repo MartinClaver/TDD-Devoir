@@ -18,8 +18,23 @@ public class PokerTest {
     }
 
     @Test
-    void shouldReturnHighCardCategory() {
-        List<Card> hole = List.of(new Card(Rank.ACE, Suit.CLUBS), new Card(Rank.TWO, Suit.DIAMONDS));
+    void shouldReturnBestCardsAndHighCardCategory() {
+        BestHand result = getBestHand(Rank.ACE, Suit.CLUBS, Rank.TWO, Suit.DIAMONDS);
+        List<Card> expectedHand = List.of(
+                new Card(Rank.ACE, Suit.CLUBS),
+                new Card(Rank.JACK, Suit.HEARTS),
+                new Card(Rank.TEN, Suit.SPADES),
+                new Card(Rank.EIGHT, Suit.CLUBS),
+                new Card(Rank.SIX, Suit.HEARTS)
+        );
+
+        assertEquals(expectedHand, result.getChosen5());
+        assertEquals(HandCategory.HIGH_CARD, result.getCategory());
+        assertEquals(Rank.ACE, result.getChosen5().get(0).getRank());
+    }
+
+    private static BestHand getBestHand(Rank r1, Suit s1, Rank r2, Suit s2) {
+        List<Card> hole = List.of(new Card(r1, s1), new Card(r2, s2));
         List<Card> board = List.of(
                 new Card(Rank.FOUR, Suit.SPADES),
                 new Card(Rank.SIX, Suit.HEARTS),
@@ -30,16 +45,12 @@ public class PokerTest {
 
         HandEvaluator evaluator = new HandEvaluator();
         BestHand result = evaluator.getBestHand(hole, board);
-        List<Card> expectedHand = List.of(
-                new Card(Rank.ACE, Suit.CLUBS),
-                new Card(Rank.JACK, Suit.HEARTS),
-                new Card(Rank.TEN, Suit.SPADES),
-                new Card(Rank.EIGHT, Suit.CLUBS),
-                new Card(Rank.SIX, Suit.HEARTS)
-                );
+        return result;
+    }
 
-        assertEquals(HandCategory.HIGH_CARD, result.getCategory());
-        assertEquals(Rank.ACE, result.getChosen5().get(0).getRank());
-        assertEquals(expectedHand, result.getChosen5());
+    @Test
+    void shoudDetectPair() {
+        BestHand result = getBestHand(Rank.TWO, Suit.CLUBS, Rank.TWO, Suit.DIAMONDS);
+        assertEquals(HandCategory.PAIR, result.getCategory());
     }
 }
