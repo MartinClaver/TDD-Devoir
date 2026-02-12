@@ -1,9 +1,9 @@
 package test;
 
 import org.junit.jupiter.api.Test;
-import poker.Card;
-import poker.Rank;
-import poker.Suit;
+import main.poker.Card;
+import main.poker.Rank;
+import main.poker.Suit;
 
 import static org.junit.jupiter.api.Assertions.*;
 

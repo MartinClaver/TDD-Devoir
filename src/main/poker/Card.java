@@ -1,4 +1,4 @@
-package poker;
+package main.poker;
 
 public class Card {
     private final Rank rank;
