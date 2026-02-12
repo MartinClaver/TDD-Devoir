@@ -53,4 +53,44 @@ public class PokerTest {
         BestHand result = getBestHand(Rank.TWO, Suit.CLUBS, Rank.TWO, Suit.DIAMONDS);
         assertEquals(HandCategory.PAIR, result.getCategory());
     }
+
+    @Test
+    void shouldReturnPairWithThreeBestKickers() {
+        List<Card> hole = List.of(new Card(Rank.ACE, Suit.CLUBS), new Card(Rank.ACE, Suit.DIAMONDS));
+        List<Card> board = List.of(
+                new Card(Rank.TEN, Suit.SPADES), new Card(Rank.EIGHT, Suit.CLUBS),
+                new Card(Rank.SIX, Suit.HEARTS), new Card(Rank.FOUR, Suit.SPADES),
+                new Card(Rank.TWO, Suit.HEARTS)
+        );
+
+        BestHand result = new HandEvaluator().getBestHand(hole, board);
+
+        assertEquals(HandCategory.PAIR, result.getCategory());
+        assertEquals(Rank.ACE, result.getChosen5().get(0).getRank());
+        assertEquals(Rank.ACE, result.getChosen5().get(1).getRank());
+        assertEquals(Rank.TEN, result.getChosen5().get(2).getRank());
+    }
+
+    @Test
+    void shouldDetectTwoPairAndPickBestKicker() {
+        List<Card> hole = List.of(
+                new Card(Rank.KING, Suit.CLUBS),
+                new Card(Rank.JACK, Suit.DIAMONDS)
+        );
+        List<Card> board = List.of(
+                new Card(Rank.KING, Suit.SPADES),
+                new Card(Rank.JACK, Suit.HEARTS),
+                new Card(Rank.TEN, Suit.CLUBS),
+                new Card(Rank.TWO, Suit.SPADES),
+                new Card(Rank.FOUR, Suit.HEARTS)
+        );
+
+        HandEvaluator evaluator = new HandEvaluator();
+        BestHand result = evaluator.getBestHand(hole, board);
+
+        assertEquals(HandCategory.TWO_PAIR, result.getCategory());
+        assertEquals(Rank.KING, result.getChosen5().get(0).getRank());
+        assertEquals(Rank.JACK, result.getChosen5().get(2).getRank());
+        assertEquals(Rank.TEN, result.getChosen5().get(4).getRank());
+    }
 }
