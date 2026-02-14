@@ -15,6 +15,30 @@ public class HandEvaluator {
         Map<Rank, Long> counts = allCards.stream()
                 .collect(Collectors.groupingBy(Card::getRank, Collectors.counting()));
 
+        Rank threeOfAKind = null;
+
+        for (Map.Entry<Rank, Long> entry : counts.entrySet()) {
+            if (entry.getValue() == 3) {
+                threeOfAKind = entry.getKey();
+                break;
+            }
+        }
+
+        if (threeOfAKind != null) {
+            List<Card> final5 = new ArrayList<>();
+
+            for (Card c : allCards) {
+                if (c.getRank() == threeOfAKind) final5.add(c);
+            }
+
+            for (Card c : allCards) {
+                if (c.getRank() != threeOfAKind && final5.size() < 5) {
+                    final5.add(c);
+                }
+            }
+            return new BestHand(HandCategory.THREE_OF_A_KIND, best5);
+        }
+
         List<Rank> pairs = counts.entrySet().stream()
                 .filter(e -> e.getValue() == 2)
                 .map(Map.Entry::getKey)

@@ -93,4 +93,10 @@ public class PokerTest {
         assertEquals(Rank.JACK, result.getChosen5().get(2).getRank());
         assertEquals(Rank.TEN, result.getChosen5().get(4).getRank());
     }
+
+    @Test
+    void shoudDetectThreeOfAKind() {
+        BestHand result = getBestHand(Rank.FOUR, Suit.CLUBS, Rank.FOUR, Suit.DIAMONDS);
+        assertEquals(HandCategory.THREE_OF_A_KIND, result.getCategory());
+    }
 }
