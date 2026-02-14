@@ -99,4 +99,43 @@ public class PokerTest {
         BestHand result = getBestHand(Rank.FOUR, Suit.CLUBS, Rank.FOUR, Suit.DIAMONDS);
         assertEquals(HandCategory.THREE_OF_A_KIND, result.getCategory());
     }
+    @Test
+    void shouldDetectStraight() {
+        List<Card> hole = List.of(
+                new Card(Rank.KING, Suit.CLUBS),
+                new Card(Rank.JACK, Suit.DIAMONDS)
+        );
+        List<Card> board = List.of(
+                new Card(Rank.KING, Suit.SPADES),
+                new Card(Rank.JACK, Suit.HEARTS),
+                new Card(Rank.TEN, Suit.CLUBS),
+                new Card(Rank.TWO, Suit.SPADES),
+                new Card(Rank.FOUR, Suit.HEARTS)
+        );
+
+        HandEvaluator evaluator = new HandEvaluator();
+        BestHand result = evaluator.getBestHand(hole, board);
+
+        assertEquals(HandCategory.STAIGHT, result.getCategory());
+    }
+
+    @Test
+    void shouldDetectFlush() {
+        List<Card> hole = List.of(
+                new Card(Rank.KING, Suit.CLUBS),
+                new Card(Rank.JACK, Suit.DIAMONDS)
+        );
+        List<Card> board = List.of(
+                new Card(Rank.KING, Suit.SPADES),
+                new Card(Rank.JACK, Suit.HEARTS),
+                new Card(Rank.TEN, Suit.CLUBS),
+                new Card(Rank.TWO, Suit.SPADES),
+                new Card(Rank.FOUR, Suit.HEARTS)
+        );
+
+        HandEvaluator evaluator = new HandEvaluator();
+        BestHand result = evaluator.getBestHand(hole, board);
+
+        assertEquals(HandCategory.FLUSH, result.getCategory());
+    }
 }
