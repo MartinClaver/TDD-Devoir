@@ -14,6 +14,27 @@ public class HandEvaluator {
 
         Map<Rank, Long> counts = allCards.stream()
                 .collect(Collectors.groupingBy(Card::getRank, Collectors.counting()));
+        Map<Suit, Long> countSuits = allCards.stream()
+                .collect(Collectors.groupingBy(Card::getSuit, Collectors.counting()));
+
+        Suit flush = null;
+
+        for (Map.Entry<Suit, Long> entry : countSuits.entrySet()) {
+            if (entry.getValue() == 5) {
+                flush = entry.getKey();
+                break;
+            }
+        }
+
+        if (flush != null) {
+            List<Card> final5 = new ArrayList<>();
+
+            for (Card c : allCards) {
+                if (c.getSuit() == flush) final5.add(c);
+            }
+
+            return new BestHand(HandCategory.FLUSH, final5);
+        }
 
         Rank threeOfAKind = null;
 
@@ -36,7 +57,7 @@ public class HandEvaluator {
                     final5.add(c);
                 }
             }
-            return new BestHand(HandCategory.THREE_OF_A_KIND, best5);
+            return new BestHand(HandCategory.THREE_OF_A_KIND, final5);
         }
 
         List<Rank> pairs = counts.entrySet().stream()
@@ -50,10 +71,10 @@ public class HandEvaluator {
             Rank p2 = pairs.get(1);
             List<Card> final5 = new ArrayList<>();
 
-            for(Card c : allCards) if(c.getRank() == p1) final5.add(c);
-            for(Card c : allCards) if(c.getRank() == p2) final5.add(c);
-            for(Card c : allCards) {
-                if(c.getRank() != p1 && c.getRank() != p2 && final5.size() < 5) final5.add(c);
+            for (Card c : allCards) if (c.getRank() == p1) final5.add(c);
+            for (Card c : allCards) if (c.getRank() == p2) final5.add(c);
+            for (Card c : allCards) {
+                if (c.getRank() != p1 && c.getRank() != p2 && final5.size() < 5) final5.add(c);
             }
             return new BestHand(HandCategory.TWO_PAIR, final5);
         }
@@ -79,7 +100,7 @@ public class HandEvaluator {
                     final5.add(c);
                 }
             }
-            return new BestHand(HandCategory.PAIR, best5);
+            return new BestHand(HandCategory.PAIR, final5);
         }
 
         return new BestHand(HandCategory.HIGH_CARD, best5);

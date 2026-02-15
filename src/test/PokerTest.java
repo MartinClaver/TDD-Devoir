@@ -122,13 +122,13 @@ public class PokerTest {
     @Test
     void shouldDetectFlush() {
         List<Card> hole = List.of(
-                new Card(Rank.KING, Suit.CLUBS),
-                new Card(Rank.JACK, Suit.DIAMONDS)
+                new Card(Rank.KING, Suit.HEARTS),
+                new Card(Rank.SEVEN, Suit.HEARTS)
         );
         List<Card> board = List.of(
                 new Card(Rank.KING, Suit.SPADES),
                 new Card(Rank.JACK, Suit.HEARTS),
-                new Card(Rank.TEN, Suit.CLUBS),
+                new Card(Rank.TEN, Suit.HEARTS),
                 new Card(Rank.TWO, Suit.SPADES),
                 new Card(Rank.FOUR, Suit.HEARTS)
         );
