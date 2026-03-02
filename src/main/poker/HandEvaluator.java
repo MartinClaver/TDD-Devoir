@@ -36,6 +36,36 @@ public class HandEvaluator {
             return new BestHand(HandCategory.FLUSH, final5);
         }
 
+        List<Rank> distinctRanks = allCards.stream()
+                .map(Card::getRank)
+                .distinct()
+                .collect(Collectors.toList());
+
+        if (distinctRanks.contains(Rank.ACE)) {
+            distinctRanks.add(Rank.ACE);
+        }
+
+        for (int i = 0; i <= distinctRanks.size() - 5; i++) {
+            Rank high = distinctRanks.get(i);
+            Rank low = distinctRanks.get(i + 4);
+
+            if (high.value - low.value == 4 || (high == Rank.FIVE && low == Rank.ACE)) {
+                List<Card> final5 = new ArrayList<>();
+                List<Rank> straightRanks = distinctRanks.subList(i, i + 5);
+
+                for (Rank r : straightRanks) {
+
+                    for (Card c : allCards) {
+                        if (c.getRank() == r) {
+                            final5.add(c);
+                            break;
+                        }
+                    }
+                }
+                return new BestHand(HandCategory.STRAIGHT, final5);
+            }
+        }
+
         Rank threeOfAKind = null;
 
         for (Map.Entry<Rank, Long> entry : counts.entrySet()) {

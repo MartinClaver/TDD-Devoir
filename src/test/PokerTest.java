@@ -101,22 +101,16 @@ public class PokerTest {
     }
     @Test
     void shouldDetectStraight() {
-        List<Card> hole = List.of(
-                new Card(Rank.KING, Suit.CLUBS),
-                new Card(Rank.JACK, Suit.DIAMONDS)
-        );
+        List<Card> hole = List.of(new Card(Rank.QUEEN, Suit.CLUBS), new Card(Rank.JACK, Suit.DIAMONDS));
         List<Card> board = List.of(
-                new Card(Rank.KING, Suit.SPADES),
-                new Card(Rank.JACK, Suit.HEARTS),
-                new Card(Rank.TEN, Suit.CLUBS),
-                new Card(Rank.TWO, Suit.SPADES),
-                new Card(Rank.FOUR, Suit.HEARTS)
+                new Card(Rank.TEN, Suit.SPADES), new Card(Rank.NINE, Suit.HEARTS),
+                new Card(Rank.EIGHT, Suit.CLUBS), new Card(Rank.FOUR, Suit.SPADES),
+                new Card(Rank.TWO, Suit.HEARTS)
         );
 
-        HandEvaluator evaluator = new HandEvaluator();
-        BestHand result = evaluator.getBestHand(hole, board);
-
-        assertEquals(HandCategory.STAIGHT, result.getCategory());
+        BestHand result = new HandEvaluator().getBestHand(hole, board);
+        assertEquals(HandCategory.STRAIGHT, result.getCategory());
+        assertEquals(Rank.QUEEN, result.getChosen5().get(0).getRank());
     }
 
     @Test
